@@ -474,22 +474,19 @@ switchAdminTab('new');
             pB = m.pointsB || 0;
           }
 
-          if (pA > pB) {
-            a.points += 3;
-          } else if (pB > pA) {
-            b.points += 3;
-          } else {
-            a.points += 1;
-            b.points += 1;
-          }
-
-          a.setPoints += pA;
-          b.setPoints += pB;
+          if(a.dq||a.dnf){if(!(b.dq||b.dnf))b.points+=3;}
+          else if(b.dq||b.dnf){a.points+=3;}
+          else if (pA > pB) {a.points += 3;}
+          else if (pB > pA) {b.points += 3;}
+          else {a.points += 1;b.points += 1;}
+          if(!(a.dq||a.dnf))a.setPoints += pA;
+          if(!(b.dq||b.dnf))b.setPoints += pB;
         });
       }
 
       let arr = Object.values(stats);
       arr.forEach(item => {
+        if(item.dq||item.dnf){item.points=0;item.setPoints=0;item.stocksFor=0;item.stocksAgainst=0;}
         item.quota = item.stocksAgainst === 0 ? (item.stocksFor > 0 ? 999.0 : 1.0) : item.stocksFor / item.stocksAgainst;
       });
 
@@ -1359,6 +1356,37 @@ switchAdminTab('new');
       });
     }
 
+    // V2.9.22: DQ/DNF gilt rückwirkend für alle Paarungen der Gruppe.
+    // Originalergebnisse bleiben im Datensatz, um eine Rücknahme zu ermöglichen.
+    function cupApplyForfeitResults(group) {
+      const teamById=new Map((group.teams||[]).map(t=>[String(t.id),t]));
+      Object.values(group.matches||{}).forEach(m=>{
+        if(m._dqOriginal){
+          const saved=m._dqOriginal;
+          ['completed','games','pointsA','pointsB','stocksA','stocksB'].forEach(k=>{
+            if(Object.prototype.hasOwnProperty.call(saved,k))m[k]=JSON.parse(JSON.stringify(saved[k]));
+            else delete m[k];
+          });
+          delete m._dqOriginal;
+          delete m.forfeit;
+        }
+        const a=teamById.get(String(m.teamA)),b=teamById.get(String(m.teamB));
+        if(!a||!b)return;
+        const outA=!!(a.dq||a.dnf),outB=!!(b.dq||b.dnf);
+        if(!outA&&!outB)return;
+        const original={};
+        ['completed','games','pointsA','pointsB','stocksA','stocksB'].forEach(k=>{
+          if(Object.prototype.hasOwnProperty.call(m,k))original[k]=JSON.parse(JSON.stringify(m[k]));
+        });
+        m._dqOriginal=original;
+        m.completed=true;
+        m.games=[{sA:outA?0:1,sB:outB?0:1}];
+        m.pointsA=outA?0:2;m.pointsB=outB?0:2;
+        m.stocksA=0;m.stocksB=0;
+        m.forfeit=outA&&outB?'DQ/DNF beide':outA?(a.dq?'DQ':'DNF'):(b.dq?'DQ':'DNF');
+      });
+    }
+
     function disqualifyTeamAction() {
       const tId = document.getElementById('adminSelectTournament').value;
       const gKey = document.getElementById('adminDqGroupSelect').value;
@@ -1372,6 +1400,7 @@ switchAdminTab('new');
 
       tm.dq = (type === 'DQ');
       tm.dnf = (type === 'DNF');
+      cupApplyForfeitResults(g);
       addHistoryEntry(tId, `Team "${tm.name}" Status gesetzt auf ${type}`);
       saveData();
       alert(`Status ${type} gesetzt!`);
@@ -1390,6 +1419,7 @@ switchAdminTab('new');
 
       tm.dq = false;
       tm.dnf = false;
+      cupApplyForfeitResults(g);
       addHistoryEntry(tId, `Team "${tm.name}" Status aufgehoben.`);
       saveData();
       alert("Status aufgehoben!");

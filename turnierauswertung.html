@@ -699,6 +699,16 @@ html.embedded-admin .btn-section-start-fixed {right:22px!important;bottom:82px!i
     body > .container:has(#view-jahresmeisterschaft.active){width:100%!important;max-width:none!important;margin:0!important;padding:0!important}
     body > .container > #view-jahresmeisterschaft.active{width:100%!important;max-width:none!important;margin:0!important;padding:0!important;align-self:stretch!important}
     body > .container > #view-jahresmeisterschaft.active > #jahresmeisterschaftFrame{width:100%!important;max-width:none!important;min-width:0!important;align-self:stretch!important}
+/* V2.9.22: Smartphone-Cup darf vertikal gescrollt werden. */
+@media (hover:none) and (pointer:coarse) and (max-width:800px){
+ html,body{height:auto!important;min-height:100dvh!important;overflow-y:auto!important;overscroll-behavior-y:auto!important;touch-action:pan-y!important}
+ body{height:auto!important;overflow-x:hidden!important}
+ body>.container{height:auto!important;min-height:calc(100dvh - 75px)!important;overflow-y:visible!important}
+ body>.container>.view.active{height:auto!important;max-height:none!important;overflow-y:visible!important;touch-action:pan-y!important}
+ #view-main.active,#view-groups.active,#view-table.active,#view-match.active,#view-admin.active{max-height:none!important;overflow-y:visible!important}
+ #playerMatchesContainer{overflow-y:auto!important;-webkit-overflow-scrolling:touch!important}
+ #playerMatchesList{overflow-y:auto!important;min-height:0!important;-webkit-overflow-scrolling:touch!important}
+}
 </style>
 
   <script type="module" src="js/auswertung-teil-01.js?v=2.8.8-wb-test"></script>

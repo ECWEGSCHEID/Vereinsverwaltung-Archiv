@@ -107,7 +107,7 @@ function tpOpenTournamentPlannerView(scrollToCurrent=true){
   if(scrollToCurrent){
     requestAnimationFrame(()=>{
       requestAnimationFrame(()=>{
-        try{tpScrollToCurrentEntry()}catch(e){console.error('Aktueller Termin:',e)}
+        try{tpScrollToCurrentEntry();if(window.matchMedia('(max-width:800px)').matches)setTimeout(tpScrollToCurrentEntry,180)}catch(e){console.error('Aktueller Termin:',e)}
       });
     });
   }
@@ -3283,10 +3283,21 @@ function wbLiveStartlistButtonHtml(x){
  return '<button type="button" class="own-live-turnier-btn" data-live-id="'+esc(x.id)+'">'
    +'<span>'+esc(x.name||'Turnier')+'</span>'+date+'</button>';
 }
+function wbLiveStartlistVisible(x){
+ if(!x||!x.id)return false;
+ const status=String(x.status||x.statusTurnier||x.turnierStatus||'').trim().toLowerCase();
+ if(x.beendet===true||x.finished===true||x.abgeschlossen===true||['beendet','abgeschlossen','finished','archiviert','archived'].includes(status))return false;
+ const raw=String(x.datum||x.date||'').trim();
+ const iso=/^(\d{4})-(\d{2})-(\d{2})/.exec(raw);
+ const de=/^(\d{2})\.(\d{2})\.(\d{4})/.exec(raw);
+ const date=iso?iso[1]+'-'+iso[2]+'-'+iso[3]:(de?de[3]+'-'+de[2]+'-'+de[1]:'');
+ const now=new Date(),today=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0');
+ return !date||date>=today;
+}
 function wbRefreshLiveStartlistButtons(){
  const box=document.getElementById('ownLiveStartlistButtons');
  if(!box)return;
- const list=wbLiveStartlisten.filter(x=>x&&x.id);
+ const list=wbLiveStartlisten.filter(wbLiveStartlistVisible);
  if(!list.length){
    box.innerHTML='<div class="own-live-empty">Noch keine Live-Startlisten vorhanden</div>'
      +'<button type="button" class="own-live-turnier-btn" onclick="wbLoadLiveStartlistenPublic()">↻ Aktualisieren</button>';

@@ -788,3 +788,14 @@ body.tv-preview-open{overflow:hidden!important}
  #externalPage.ecw-reservation-embed #ecwExternalHomeBar{right:10px;bottom:10px;max-width:calc(100vw - 20px)}
  #externalPage.ecw-reservation-embed #ecwExternalHomeBar button{min-width:0;font-size:13px;padding:10px 12px}
 }
+
+/* V2.9.22 Smartphone: vorhandene Zurück-Schaltfläche am Display fixieren. */
+@media(max-width:800px) and (pointer:coarse){
+ .btn-startmenu-fixed,#globalStartMenuBtn,.external-back-btn{position:fixed!important;bottom:calc(16px + env(safe-area-inset-bottom,0px))!important;right:14px!important;z-index:10050!important;max-width:calc(100vw - 28px)!important}
+}
+
+@media(max-width:800px) and (pointer:coarse){
+ .view.active>.bottom{position:fixed!important;bottom:calc(8px + env(safe-area-inset-bottom,0px))!important;right:12px!important;left:auto!important;z-index:10040!important;width:auto!important;max-width:calc(100vw - 24px)!important;background:transparent!important;pointer-events:none!important}
+ .view.active>.bottom button{pointer-events:auto!important;min-height:44px!important;box-shadow:0 4px 16px rgba(0,0,0,.6)!important}
+ .view.active:has(>.bottom){padding-bottom:75px!important}
+}
