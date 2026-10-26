@@ -3767,24 +3767,17 @@ function tpFindTodayIndex(){
 }
 function tpScrollToCurrentEntry(){
   const el=document.getElementById('tpContent');if(!el)return;
-  const cards=[...el.querySelectorAll('.tp-card')];
-  if(!cards.length)return;
+  const cards=[...el.querySelectorAll('.tp-card')];if(!cards.length)return;
   const today=todayStr();
-
-  // Beim Öffnen immer den nächsten Termin ab heute anzeigen.
-  // Ist im gewählten Zeitraum keiner mehr vorhanden, den letzten Termin zeigen.
-  // Die aktuelle Jahres-/Zeitraumauswahl bleibt unverändert.
-  const target=cards.find(card=>{
-    const date=String(card.dataset.tpDate||'');
-    return date && date>=today;
-  }) || cards[cards.length-1];
-
-  const listRect=el.getBoundingClientRect();
-  const cardRect=target.getBoundingClientRect();
-  // Den nächsten Termin möglichst oben positionieren; vorherige Termine
-  // bleiben durch Zurückscrollen erreichbar.
-  const desired=el.scrollTop+(cardRect.top-listRect.top)-12;
-  el.scrollTop=Math.max(0,desired);
+  const target=cards.find(card=>String(card.dataset.tpDate||'')>=today)||cards[cards.length-1];
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    target.scrollIntoView({behavior:'instant',block:'start',inline:'nearest'});
+    const topGap=window.matchMedia('(max-width:800px)').matches?90:12;
+    let n=target.parentElement,scrollParent=null;
+    while(n&&n!==document.body){const st=getComputedStyle(n);if(/auto|scroll/.test(st.overflowY)&&n.scrollHeight>n.clientHeight+5){scrollParent=n;break}n=n.parentElement}
+    if(scrollParent)scrollParent.scrollTop=Math.max(0,scrollParent.scrollTop-topGap);
+    else window.scrollBy(0,-topGap);
+  }));
 }
 function tpScrollToToday(){tpScrollToCurrentEntry();}
 
