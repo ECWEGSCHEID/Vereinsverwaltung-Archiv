@@ -1,0 +1,1 @@
+V2.8.8 TEST – Whiteboard-Benutzererkennung korrigiert; Stockdart bleibt gesperrt. Ausgangsbasis V2.8.7.

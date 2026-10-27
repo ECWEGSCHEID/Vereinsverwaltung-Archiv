@@ -1,0 +1,13 @@
+EC Wegscheid V2.9.16 – RESERVIERUNG ZURUECK FIX (TEST)
+
+Basis: V2.9.15. Keine produktive Veroeffentlichung.
+
+Fehlerursache: #ecwExternalHomeBar war in der Hauptverwaltung standardmaessig display:none und wurde nur bei .ecw-tournament-embed eingeblendet. Reservierung wurde nicht als solcher Modus behandelt.
+
+Korrektur: Reservierung bleibt im iframe eingebettet. Die Elternseite blendet einen eigenen, festen Button unten rechts ein. Der Button fuehrt ueber closeExternalPage() direkt zur Vereinsstartseite; keine Browser-History und kein Tabwechsel. Keine erneute Anmeldung bei gueltiger Sitzung.
+
+Unveraendert: Uhrzeitspalte, Reservierungslogik, Firebase-Regeln, Turnierverwaltung.
+
+Installation: Inhalt von 01_GITHUB_UPLOAD ins Repository Vereinsverwaltung-Aktuell hochladen (vorher Backup). Der separate Reservierungssystem-Repository-Inhalt muss fuer DIESEN Fix nicht geaendert werden.
+
+Test: Reservierung ueber Startseite oeffnen, roten Button unten rechts pruefen, zurueck und erneut oeffnen. Auf PC, Smartphone und WM65B testen. Die bisherige Reservierungs-Uhrzeitspalte kontrollieren.

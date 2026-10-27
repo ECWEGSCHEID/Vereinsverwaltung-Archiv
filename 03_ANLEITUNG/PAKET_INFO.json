@@ -1,0 +1,15 @@
+{
+  "paketversion": "2.9.11",
+  "titel": "Vereinverwaltung EC Wegscheid – Navigation, Jahresabrechnung und Verwaltung Sammeltest",
+  "basis": "V2.9.10",
+  "freigabe": "TEST – nicht produktiv freigegeben",
+  "firebase_rules": "Referenzregeln unverändert; nicht ungeprüft einspielen",
+  "aenderungen": [
+    "Benutzernamen in Firestore-Profilübersicht",
+    "Geburtstagsalter beim nächsten Geburtstag korrekt",
+    "Rücknavigation aus Cup/Doppel-KO zur Verwaltung ohne doppelten Hauptmenübutton",
+    "Jahresabrechnung: links Sponsoring, rechts Einnahmen/Ausgaben/Jahresgewinn",
+    "Benutzerkennwort und Datensicherung in Benutzer, Rechte und Datensicherung",
+    "Turnierwirtschaftlichkeit und Helfer umbenannt"
+  ]
+}
