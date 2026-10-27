@@ -14,6 +14,7 @@
       const tRef = window.fbRef(window.db, 'cup/public/tournaments');
       window.fbOnValue(tRef, (snapshot) => {
         tournaments = snapshot.val() || {};
+        if(document.getElementById('adminSecPrint')?.style.display==='block' && typeof window.cupFinalLoad==='function') window.cupFinalLoad();
         renderMainButtons();
         if (activeId && tournaments[activeId]) {
           if (document.getElementById('view-groups').classList.contains('active')) openGroupSelection(activeId);
@@ -42,6 +43,7 @@ setDefaultTeamsTemplate();
       const a = tab.charAt(0).toUpperCase() + tab.slice(1);
       document.getElementById('tab' + a)?.classList.add('active');
       document.getElementById('adminSec' + a).style.display = 'block';
+      if(tab==='print' && typeof window.cupFinalLoad==='function') window.cupFinalLoad();
     }
 
     function setDefaultTeamsTemplate() {

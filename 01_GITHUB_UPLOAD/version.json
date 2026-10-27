@@ -1,54 +1,54 @@
 {
   "version": "2.9.27",
-  "release": "EC Wegscheid V2.9.23 – Vereine verwalten",
+  "release": "EC Wegscheid V2.9.27 – Korrigiertes Testpaket",
   "module": {
     "hauptprogramm": {
       "datei": "index.html",
-      "status": "Im Testpaket V2.9.13 enthalten",
-      "sha256": "d88e85f496419a947583687aa0cb853ba161b86e6f5aa18bba1fa6ac55331ac9"
+      "status": "Enthalten in Testpaket V2.9.27; Firebase-Funktionstest erforderlich",
+      "sha256": "bd1de0e08c8d59ef90c1bfca47e489121001032c04084a8ae97f241062efe0c7"
     },
     "mitgliederverwaltung": {
       "datei": "mitgliederverwaltung.html",
-      "status": "Im Testpaket V2.9.13 enthalten",
-      "sha256": "e9a41dcd7c03060640466142466bdb17cc0f7fbfd2463d2aee9753a1c456929b"
+      "status": "Enthalten in Testpaket V2.9.27; Firebase-Funktionstest erforderlich",
+      "sha256": "7b0da261005726aa510435dda96511039ca4d254af3e936ce9e1fb0b2d81d870"
     },
     "turnierverwaltung": {
       "datei": "turnierverwaltung.html",
-      "status": "Im Testpaket V2.9.13 enthalten",
-      "sha256": "31f4ca1a396de0dae5caa735e655f124c3e0bb7689fb6569b4bc6ed54f5ec709"
+      "status": "Enthalten in Testpaket V2.9.27; Firebase-Funktionstest erforderlich",
+      "sha256": "9b5a64f08b85013c079416434c86fdbd7a2274d3da67f4f455e32b6a94e5718e"
     },
     "turnierauswertung": {
       "datei": "turnierauswertung.html",
-      "status": "Im Testpaket V2.9.13 enthalten",
-      "sha256": "a299b7629cc4b86628cc53307da0209cfde4d15f5ef8f4f69acf4d547d605f42"
+      "status": "Enthalten in Testpaket V2.9.27; Firebase-Funktionstest erforderlich",
+      "sha256": "8e99f73c62aa1ca80ec372402b818c6f2f9729c0bff962c6045b5a284a2d816c"
     },
     "turnierwirtschaftlichkeit": {
       "datei": "turnierwirtschaftlichkeit.html",
-      "status": "Im Testpaket V2.9.13 enthalten",
-      "sha256": "5b0c7ce83e3aba60d48fe8056672ac01a6df49526a45434e9784e2bed2df9ae5"
+      "status": "Enthalten in Testpaket V2.9.27; Firebase-Funktionstest erforderlich",
+      "sha256": "633ad709d2c669938ff1de48bb1c2f5fc0e5cf3068d09b3c54b034c83bed83c7"
     },
     "solo-pyramide": {
       "datei": "solo-pyramide.html",
-      "status": "Im Testpaket V2.9.13 enthalten",
-      "sha256": "3c5c22954287a2c798ef6322e8e7a804915ed50916f7ec90604ffdcc7f6cd5b8"
+      "status": "Enthalten in Testpaket V2.9.27; Firebase-Funktionstest erforderlich",
+      "sha256": "4d4bdb200f068f015cbc67d58cdfd501dbbdd71b1f69360ebc6a36a8c266e46f"
     },
     "smartphone-zugang": {
       "datei": "mobile-zugang.html",
-      "status": "Im Testpaket V2.9.13 enthalten",
-      "sha256": "575f1913d93d5849aa73756d117dc7368e742b1ba7a01bc3a97c722e4d18b819"
+      "status": "Enthalten in Testpaket V2.9.27; Firebase-Funktionstest erforderlich",
+      "sha256": "917e05f8e2cd99e15ddfdc23a87648531c7e5d3cf8a956cdabb55ef137f6b0a0"
     },
     "live-startlisten": {
       "datei": "live-startlisten.html",
-      "status": "Im Testpaket V2.9.13 enthalten",
+      "status": "Enthalten in Testpaket V2.9.27; Firebase-Funktionstest erforderlich",
       "sha256": "14f1f5ca7320f4372ba922a617a4583f647b5437ff4ca40306aa3ce0a6c9fd66"
     }
   },
   "changes": [
-    "Termin- und Turnierplaner: einheitliche Benennung in Menü, Übersicht und Untermenü",
-    "Startseite aus Verwaltung: rechts unten Zurück zur Verwaltung, Firebase-Sitzung erhalten",
-    "Veranstaltungsliste: unnötige Google- und Export-Prüfbuttons entfernt",
-    "Google Kalender → Vereinsverwaltung: Abgleich eindeutig verknüpfter Termine beim Öffnen (mit aktiver OAuth-Verbindung) oder nach manuellem Verbinden; Konflikte und Löschungen werden nicht stillschweigend überschrieben",
-    "Verbände, Regelwerk und Sonstiges: Links im Menü Startseite verwalten bearbeiten, hinzufügen, entfernen, sortieren und zentral in Firebase speichern"
+    "Vereine: Vereinszusatz, Einzellöschung, Kategorien und gewünschte Turnierarten",
+    "Turniereinladungen: Auswahl nur aktiver zukünftiger Turniere",
+    "Interne Cups: Admin-Finalrunde A/B und Siegerliste mit Gruppenblatt",
+    "Versionen: sichtbare Programm-Version und lokale Cache-Parameter vereinheitlicht",
+    "Cup-Finalrunde beim Öffnen des Druck-Menüs und bei Firebase-Aktualisierung anzeigen"
   ],
   "hinweis": "Dokumente in Firestore appSettings/druckdokumente und druckpdf_*; Regeln FIRESTORE_REGELN_DOKUMENTE_V2.5.3.rules vor Nutzung veröffentlichen. Automatischer PDF-Druckdialog ist browserabhängig und muss auf dem Samsung WM65B geprüft werden. 1 Exemplar kann nicht erzwungen werden.",
   "doppelKo": {

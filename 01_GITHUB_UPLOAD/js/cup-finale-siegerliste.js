@@ -5,6 +5,8 @@ const $=id=>document.getElementById(id);
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const tid=()=>($('adminPrintSelectTournament')?.value||$('adminSelectTournament')?.value||'');
 const cup=()=>tournaments[tid()];
+const isAdmin=()=>((typeof window.getEffectiveRole==='function'?window.getEffectiveRole():window.currentRole)==='admin');
+const requireAdmin=()=>{if(isAdmin())return true;alert('Nur Administratoren dürfen die Cup-Finalrunde bearbeiten oder drucken.');return false;};
 function groups(t){return cupSortedGroups(t.groups||{});}
 function standings(t){return groups(t).map(([id,g])=>({id,name:g.name||id,rows:calculateStandingsForTournamentGroup(t,id)}));}
 function seed(t,n){
@@ -60,26 +62,26 @@ function ranking(t){
  return {rows:ordered.map(k=>map.get(k)||'–'),complete:true};
 }
 function printRows(arr,cols){return '<table><thead><tr>'+cols.map(x=>'<th>'+esc(x)+'</th>').join('')+'</tr></thead><tbody>'+arr.map(row=>'<tr>'+row.map(x=>'<td>'+esc(x)+'</td>').join('')+'</tr>').join('')+'</tbody></table>';}
-window.cupFinalLoad=function(){const t=cup(),box=$('cupFinalSettings');if(!box)return;box.style.display=t?'block':'none';if(!t)return;
+window.cupFinalLoad=function(){const t=cup(),box=$('cupFinalSettings');if(!box)return;box.style.display=(t&&isAdmin())?'block':'none';if(!t)return;
  const f=cfg(t);$('cupFinalMode').value=f?.mode||'A';$('cupFinalCount').value=String(f?.count||Math.min(4,groups(t).reduce((n,[,g])=>n+(g.teams||[]).length,0)));
  $('cupFinalThird').checked=f?.thirdPlace!==false;
  cupFinalRender();};
-window.cupFinalSetup=function(){const t=cup();if(!t)return;const mode=$('cupFinalMode').value,count=Number($('cupFinalCount').value);if(count<2||count>32||!Number.isInteger(count))return alert('Bitte 2 bis 32 Finalteilnehmer wählen.');if(mode==='A'&&!([2,4,8,16,32].includes(count)))return alert('Platzierungsspiele benötigen 2, 4, 8, 16 oder 32 Teilnehmer. Für andere Zahlen bitte Finalgruppe B wählen.');
+window.cupFinalSetup=function(){if(!requireAdmin())return;const t=cup();if(!t)return;const mode=$('cupFinalMode').value,count=Number($('cupFinalCount').value);if(count<2||count>32||!Number.isInteger(count))return alert('Bitte 2 bis 32 Finalteilnehmer wählen.');if(mode==='A'&&!([2,4,8,16,32].includes(count)))return alert('Platzierungsspiele benötigen 2, 4, 8, 16 oder 32 Teilnehmer. Für andere Zahlen bitte Finalgruppe B wählen.');
  const chosen=seed(t,count);if(chosen.length<count)return alert('Es sind nur '+chosen.length+' qualifizierbare Teilnehmer vorhanden.');
  const existing=cfg(t);if(existing?.matches?.some(isDone)&&!confirm('Finale neu einrichten? Bereits eingegebene Finalergebnisse werden zurückgesetzt.'))return;
  t.cupFinal={mode,count,thirdPlace:$('cupFinalThird').checked,teams:chosen,matches:[]};saveData();cupFinalRender();};
-window.cupFinalChangeTeam=function(i,value){const t=cup(),f=cfg(t);if(!f)return;const [group,id]=value.split('::');const g=t.groups[group],tm=(g?.teams||[]).find(x=>String(x.id)===id);if(!tm)return;
+window.cupFinalChangeTeam=function(i,value){if(!requireAdmin())return;const t=cup(),f=cfg(t);if(!f)return;const [group,id]=value.split('::');const g=t.groups[group],tm=(g?.teams||[]).find(x=>String(x.id)===id);if(!tm)return;
  if(f.teams.some((x,j)=>j!==i&&x.group===group&&String(x.id)===id))return alert('Dieser Teilnehmer ist bereits ausgewählt.');
  if(f.matches?.some(isDone)&&!confirm('Teilnehmer ändern? Finalergebnisse werden zurückgesetzt.'))return;
  f.teams[i]={id,group,name:tm.name};f.matches=[];saveData();cupFinalRender();};
-window.cupFinalSaveScore=function(key){const t=cup(),f=cfg(t);if(!f)return;const current=matches(f),m=current.find(x=>x.key===key);if(!m||!m.ta||!m.tb)return;
+window.cupFinalSaveScore=function(key){if(!requireAdmin())return;const t=cup(),f=cfg(t);if(!f)return;const current=matches(f),m=current.find(x=>x.key===key);if(!m||!m.ta||!m.tb)return;
  const a=$('cfsA_'+key)?.value,b=$('cfsB_'+key)?.value;
  if(a===''||b===''||!Number.isInteger(Number(a))||!Number.isInteger(Number(b))||Number(a)<0||Number(b)<0||Number(a)===Number(b))return alert('Bitte zwei unterschiedliche, nichtnegative ganze Ergebnisse eingeben.');
  m.a=a;m.b=b;f.matches=(f.matches||[]).filter(x=>x.key!==key);f.matches.push(m);
  // Änderungen an früheren Runden setzen abhängige Paarungen automatisch zurück
  if(f.mode==='A')f.matches=knockout(f);
  saveData();cupFinalRender();};
-window.cupFinalClearScore=function(key){const t=cup(),f=cfg(t);if(!f)return;f.matches=(f.matches||[]).filter(m=>m.key!==key);if(f.mode==='A')f.matches=knockout(f);saveData();cupFinalRender();};
+window.cupFinalClearScore=function(key){if(!requireAdmin())return;const t=cup(),f=cfg(t);if(!f)return;f.matches=(f.matches||[]).filter(m=>m.key!==key);if(f.mode==='A')f.matches=knockout(f);saveData();cupFinalRender();};
 window.cupFinalRender=function(){const t=cup(),area=$('cupFinalEditor');if(!area||!t)return;const f=cfg(t);if(!f){area.innerHTML='<p>Finalmodus und Teilnehmerzahl auswählen, dann „Finalrunde anlegen“.</p>';return;}
  const available=groups(t).flatMap(([group,g])=>(g.teams||[]).filter(x=>!x.dq&&!x.dnf).map(x=>({value:group+'::'+x.id,name:(g.name||group)+' · '+x.name})));
  let html='<h4>Finalteilnehmer ('+f.teams.length+')</h4><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:5px">';
@@ -87,7 +89,7 @@ window.cupFinalRender=function(){const t=cup(),area=$('cupFinalEditor');if(!area
  matches(f).forEach(m=>{html+='<div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin:5px 0;padding:6px;border:1px solid #555;border-radius:6px"><span style="min-width:220px">'+esc(m.key==='third'?'Spiel um Platz 3':m.key)+' · '+esc(m.na)+' – '+esc(m.nb)+'</span><input id="cfsA_'+esc(m.key)+'" type="number" min="0" step="1" value="'+esc(m.a)+'" style="width:65px"><b>:</b><input id="cfsB_'+esc(m.key)+'" type="number" min="0" step="1" value="'+esc(m.b)+'" style="width:65px"><button class="btn btn-success" onclick="cupFinalSaveScore(\''+esc(m.key)+'\')">Speichern</button><button class="btn btn-secondary" onclick="cupFinalClearScore(\''+esc(m.key)+'\')">Löschen</button></div>';});
  const r=ranking(t);html+='<p><b>'+ (r.complete?'Endergebnis vollständig':'Zwischenergebnis – Finale noch nicht abgeschlossen')+'</b></p>';
  area.innerHTML=html;};
-window.cupPrintSiegerliste=function(){const t=cup();if(!t)return alert('Bitte Cup auswählen.');const g=standings(t),f=cfg(t),r=ranking(t);const finalDone=r.complete;const title=finalDone?'Endergebnis':'Zwischenergebnis – vorläufige Platzierungen';
+window.cupPrintSiegerliste=function(){if(!requireAdmin())return;const t=cup();if(!t)return alert('Bitte Cup auswählen.');const g=standings(t),f=cfg(t),r=ranking(t);const finalDone=r.complete;const title=finalDone?'Endergebnis':'Zwischenergebnis – vorläufige Platzierungen';
  const first=r.rows.map((name,i)=>{
   let place=i+1;
   if(f?.mode==='A'&&r.complete){
