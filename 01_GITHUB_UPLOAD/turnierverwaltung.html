@@ -1682,6 +1682,7 @@ copy of the Program in return for a fee.
           <div><label for="vTelefon">Telefon</label><input id="vTelefon" maxlength="80" inputmode="tel" autocomplete="tel"></div>
           <div><label for="vEmail">E-Mail</label><input id="vEmail" maxlength="254" type="email" autocomplete="email"></div>
           <div><label for="vHomepage">Homepage</label><input id="vHomepage" maxlength="300" inputmode="url" placeholder="https://..."></div>
+          <div style="grid-column:1/-1"><label>Gewünschte Turniere (Mehrfachauswahl)</label><div style="display:flex;flex-wrap:wrap;gap:18px;margin-top:7px"><label style="display:flex;align-items:center;gap:6px"><input type="checkbox" class="vGewuenschteTurniere" value="Herren"> Herren</label><label style="display:flex;align-items:center;gap:6px"><input type="checkbox" class="vGewuenschteTurniere" value="Damen"> Damen</label><label style="display:flex;align-items:center;gap:6px"><input type="checkbox" class="vGewuenschteTurniere" value="Mixed"> Mixed</label><label style="display:flex;align-items:center;gap:6px"><input type="checkbox" class="vGewuenschteTurniere" value="Brotzeit"> Brotzeit</label></div><small class="meta">Welche Turniere möchte der Verein beim EC Wegscheid besuchen?</small></div>
           <div><label for="vKategorie">Kategorie (eine Auswahl)</label><select id="vKategorie"><option value="">Nicht zugeordnet</option><option value="1">1 – Benachbarte / befreundete Vereine</option><option value="2">2 – Vereine aus benachbarten Kreisen</option><option value="3">3 – Frühere Turnierteilnehmer</option><option value="4">4 – Bisher nicht bei uns gewesen</option></select></div>
           <div><label for="vAktualisiert">Aktualisiert am (Datum)</label><input id="vAktualisiert" type="date"><label style="display:flex;gap:8px;align-items:center;margin-top:8px"><input type="checkbox" id="vAktualisiertCheck"> Daten als überprüft kennzeichnen</label></div>
           <div><label for="vKontakteAlle">Alle Ansprechpartner (eine Zeile je Eintrag)</label><textarea id="vKontakteAlle" rows="4" style="width:100%"></textarea></div>
@@ -4962,7 +4963,7 @@ function localTodayIso(){
  return `${y}-${m}-${day}`;
 }
 function tournamentIsFinished(t){return !!t?.datum && String(t.datum)<localTodayIso()}
-function tournamentIsActive(t){return !t?.datum || String(t.datum)>=localTodayIso()}
+function tournamentIsActive(t){const status=String(t?.status||t?.turnierStatus||'').toLowerCase();return !['abgeschlossen','beendet','finished','completed','archiviert'].includes(status)&&!t?.abgeschlossen&&!t?.beendet&&!t?.finished&&!t?.completed&&(!t?.datum||String(t.datum)>=localTodayIso())}
 function tournamentCategory(t){if(['Herren','Damen','Mixed'].includes(t?.kategorie))return t.kategorie;const n=String(t?.name||'').toLowerCase();if(n.includes('damen'))return 'Damen';if(n.includes('mixed'))return 'Mixed';return 'Herren'}
 function isoFromGerman(d){const m=String(d||'').match(/^(\d{2})\.(\d{2})\.(\d{4})$/);return m?`${m[3]}-${m[2]}-${m[1]}`:String(d||'')}
 function historyAllRecords(){
@@ -5246,7 +5247,7 @@ function liveStartlistWritePayload(data){
 }
 async function publishLiveStartlisten(){
   if(!auth.currentUser)return;
-  const jobs=turniereCache.map(t=>{
+  const jobs=turniereCache.filter(tournamentIsActive).map(t=>{
     const entries=liveMeldungenAll.filter(m=>m.turnierId===t.id).sort((a,b)=>(a.anmeldedatum||'').localeCompare(b.anmeldedatum||'')||((a.erstelltAm?.seconds||0)-(b.erstelltAm?.seconds||0))||String(a.id||'').localeCompare(String(b.id||''))).map(liveStartlistSafeEntry);
     const payload={turnierId:t.id,name:String(t.name||'Turnier'),datum:String(t.datum||''),uhrzeit:String(t.uhrzeit||''),ort:String(t.ort||''),kategorie:String(tournamentCategory(t)||''),meldeUhrzeit:String(t.meldeUhrzeit||''),maxMannschaften:Number(t.maxMannschaften)||null,entries,vorlage:liveStartlistTemplateFor(t)};
     return setDoc(doc(db,'liveStartlisten',t.id),liveStartlistWritePayload(payload));
@@ -5278,7 +5279,7 @@ function updateLiveStartlistenOptions(){
 }
 function startLiveStartlistenViewer(){
   if(liveStartlistenViewerUnsub)return;
-  liveStartlistenViewerUnsub=onSnapshot(query(collection(db,'liveStartlisten')),snap=>{liveStartlistenCache=snap.docs.map(d=>({...d.data(),id:d.id})).sort((a,b)=>(a.datum||'9999-99-99').localeCompare(b.datum||'9999-99-99')||(a.name||'').localeCompare(b.name||''));updateLiveStartlistenOptions();},err=>{console.error('Live Startliste:',err);const status=document.getElementById('liveStartStatus');if(status)status.textContent='Live-Startlisten konnten nicht geladen werden.';});
+  liveStartlistenViewerUnsub=onSnapshot(query(collection(db,'liveStartlisten')),snap=>{liveStartlistenCache=snap.docs.map(d=>({...d.data(),id:d.id})).filter(tournamentIsActive).sort((a,b)=>(a.datum||'9999-99-99').localeCompare(b.datum||'9999-99-99')||(a.name||'').localeCompare(b.name||''));updateLiveStartlistenOptions();},err=>{console.error('Live Startliste:',err);const status=document.getElementById('liveStartStatus');if(status)status.textContent='Live-Startlisten konnten nicht geladen werden.';});
 }
 function showLiveStartliste(){startLiveStartlistenViewer();showView('viewLiveStartliste','navLiveStartliste');}
 
@@ -5783,6 +5784,7 @@ function openClubEditor(){
 }
 function clearVereinForm(){
   closeClubEditor();
+  document.querySelectorAll('.vGewuenschteTurniere').forEach(e=>{e.checked=false});
   for(const id of ['vKontakteAlle','vEmailsAlle','vKategorie','vAktualisiert']){const e=document.getElementById(id);if(e)e.value=''}
   document.getElementById('vAktualisiertCheck').checked=false;
   document.getElementById('vAktualisiert').value=clubTodayISO();
@@ -5803,6 +5805,7 @@ function editVerein(id){
   document.getElementById('vEmail').value=clubEmails(v)[0]||'';
   document.getElementById('vHomepage').value=v.homepage||'';
   document.getElementById('vKategorie').value=String(v.kategorie||'');
+  document.querySelectorAll('.vGewuenschteTurniere').forEach(e=>{e.checked=(v.gewuenschteTurniere||[]).includes(e.value)});
   document.getElementById('vAktualisiert').value=v.aktualisiertAm||clubTodayISO();
   document.getElementById('vAktualisiertCheck').checked=!!v.aktualisiertAm;
   document.getElementById('vKontakteAlle').value=clubContacts(v).join('\n');
@@ -5839,7 +5842,7 @@ async function saveVereinAdresse(){
   const vereinDaten={
     name,vereinszusatz:vereinswert('vVereinszusatz'),vorstand:contacts.join(' / '),ansprechpartner:contacts.join(' / '),ansprechpartnerListe:contacts,
     strasse:vereinswert('vStrasse'),plz:vereinswert('vPLZ'),ort:vereinswert('vOrt'),telefon:vereinswert('vTelefon'),
-    email:emails.join('; '),emails,homepage:vereinswert('vHomepage'),kategorie:cat,aktualisiertAm:check?checkedDate:(existing?.aktualisiertAm||'')
+    email:emails.join('; '),emails,homepage:vereinswert('vHomepage'),gewuenschteTurniere:[...document.querySelectorAll('.vGewuenschteTurniere:checked')].map(e=>e.value),kategorie:cat,aktualisiertAm:check?checkedDate:(existing?.aktualisiertAm||'')
   };
   const payload=embeddedInMain
     ? window.parent.JSON.parse(window.parent.JSON.stringify(vereinDaten))
@@ -5903,6 +5906,7 @@ function renderVereineAdmin(){
     '<div><strong>Vereinszusatz:</strong> '+escapeHtml(v.vereinszusatz||'–')+'</div><div><strong>Telefon:</strong> '+escapeHtml(v.telefon||'–')+'</div><div><strong>Homepage:</strong> '+escapeHtml(v.homepage||'–')+'</div>'+
     '<div><strong>Ansprechpartner:</strong> '+escapeHtml(clubContacts(v).join(' · ')||'–')+'</div>'+
     '<div><strong>E-Mails:</strong> '+escapeHtml(clubEmails(v).join(' · ')||'–')+'</div>'+
+    '<div><strong>Gewünschte Turniere:</strong> '+escapeHtml((v.gewuenschteTurniere||[]).join(' · ')||'–')+'</div>'+
     '<div><strong>Turnierteilnahmen:</strong> Herren '+(h.herren||0)+' · Mixed '+(h.mixed||0)+' · Damen '+(h.damen||0)+'</div>';
    html+='<tr><td><strong>'+escapeHtml([v.vereinszusatz,v.name].filter(Boolean).join(' ')||'')+'</strong><div class="meta">'+escapeHtml([v.plz,v.ort].filter(Boolean).join(' '))+'</div><details class="club-detail-collapse"><summary>Weitere Informationen anzeigen</summary>'+details+'</details></td>'+
     '<td>'+(v.kategorie?escapeHtml(String(v.kategorie)):'–')+'</td><td>'+escapeHtml(v.aktualisiertAm?String(v.aktualisiertAm).split('-').reverse().join('.'):'–')+'</td>'+

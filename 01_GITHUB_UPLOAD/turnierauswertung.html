@@ -1083,10 +1083,19 @@ html.embedded-admin .btn-section-start-fixed {right:22px!important;bottom:82px!i
       <!-- ADMIN TAB: DRUCK -->
       <div id="adminSecPrint" style="display: none;">
         <label>Turnier auswählen:</label>
-        <select id="adminPrintSelectTournament" onchange="onPrintTournamentChanged()">
+        <select id="adminPrintSelectTournament" onchange="onPrintTournamentChanged();cupFinalLoad()">
           <option value="">-- Turnier wählen --</option>
         </select>
 
+        <div id="cupFinalSettings" style="display:none;margin:12px 0;padding:12px;border:1px solid #a44;border-radius:10px;background:rgba(40,15,20,.55)">
+          <h3 style="margin:0 0 8px">🏆 Finalrunde &amp; Siegerliste (nur Admin)</h3>
+          <label>Finalmodus</label><select id="cupFinalMode"><option value="A">A – Platzierungsspiele / KO</option><option value="B">B – Neue Finalgruppe (jeder gegen jeden)</option></select>
+          <label>Anzahl Finalteilnehmer (2–32)</label><input id="cupFinalCount" type="number" min="2" max="32" value="4" step="1">
+          <label style="display:flex;gap:6px;align-items:center"><input type="checkbox" id="cupFinalThird" checked style="width:auto"> Spiel um Platz 3 (Modus A)</label>
+          <button class="btn btn-secondary" onclick="cupFinalSetup()">Finalrunde anlegen / neu einrichten</button>
+          <div id="cupFinalEditor"></div>
+          <button class="btn btn-success" onclick="cupPrintSiegerliste()">🖨️ Siegerliste / Zwischenergebnis drucken (PDF über Druckdialog)</button>
+        </div>
         <div id="adminPrintContent" style="display: none;">
           <div style="display: flex; gap: 4px; margin-bottom: 4px;">
             <button class="btn btn-secondary" style="padding: 4px;" onclick="toggleAllMatchesPrint(true)">Alle</button>
@@ -1218,6 +1227,7 @@ html.embedded-admin .btn-section-start-fixed {right:22px!important;bottom:82px!i
   <script src="js/auswertung-teil-04.js?v=2.5.2"></script>
   <script src="js/auswertung-teil-05.js?v=2.5.2"></script>
   <script src="js/auswertung-teil-06.js?v=2.6-komplett"></script>
+  <script src="js/cup-finale-siegerliste.js?v=2.9.27"></script>
 
 <div id="centralBackupOverlay" style="display:none;position:fixed;inset:0;z-index:10050;background:rgba(0,0,0,.78);padding:18px;overflow:auto;">
     <div style="max-width:760px;margin:45px auto;background:rgba(25,29,35,.98);border:1px solid rgba(255,255,255,.28);border-radius:14px;padding:20px;box-shadow:0 20px 60px rgba(0,0,0,.55);">
