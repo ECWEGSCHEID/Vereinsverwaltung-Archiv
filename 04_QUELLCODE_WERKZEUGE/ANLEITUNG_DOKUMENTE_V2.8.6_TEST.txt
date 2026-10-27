@@ -1,0 +1,52 @@
+EC WEGSCHEID – DOKUMENTE & DRUCKEN V2.8.6 – FIREBASE-DIAGNOSE
+==============================================================
+Grundlage: Komplettpaket Kalender V2.8.5 (unverändert bis auf
+index.html Cache-Busting und js/dokumente-drucken.js).
+
+Problem: Am PC vorhandene PDFs fehlen auf dem Samsung-Whiteboard.
+
+Neu:
+- Dokumentenliste wird bei jedem Öffnen ausdrücklich vom Firestore-SERVER
+  geladen, nicht nur aus dem lokalen Browser-Cache.
+- Sichtbarer Status: Anzahl Dokumente, letzter Ladezeitpunkt, V2.8.6.
+- Fehler und fehlende Berechtigung werden direkt in der Dokumentenansicht
+  angezeigt statt als vermeintlich leere Dokumentenliste.
+- Aktualisieren-Knopf für erneutes Laden.
+- Bei Firebase-Ladefehler wird die Admin-Bearbeitung gesperrt, damit die
+  vermeintlich leere Liste nicht versehentlich die echten Daten überschreibt.
+- Nach dem Speichern prüft das Programm, ob der Server die Dokumentenliste
+  mit derselben Anzahl Einträge zurückliefert.
+
+TESTABLAUF:
+1. Die funktionierende V2.8.5 sichern.
+2. Dieses Paket separat über VS Code Live Server starten.
+3. Am PC Verwaltung > Dokumente & Drucken verwalten öffnen.
+   Vorhandene PDF-Titel kontrollieren. Nicht neu hochladen.
+4. Am PC die öffentliche Dokumentenansicht öffnen und die Statuszeile lesen.
+5. Auf dem Samsung-Whiteboard die veröffentlichte Testversion öffnen.
+   Achtung: Lokaler Live Server auf dem PC ist nicht automatisch die
+   GitHub-Webseite am Whiteboard. Für einen Test auf dem Whiteboard muss
+   die neue Version auch unter der dort verwendeten URL bereitstehen.
+6. Am Whiteboard Dokumente & Drucken öffnen und Status ablesen:
+   a) "Vom Firebase-Server geladen: N Dokument(e)": Metadaten erreichbar.
+   b) "Zugriff verweigert": aktive Firestore-Regeln prüfen.
+   c) "keine zentrale Dokumentenliste": falsches Firebase-Projekt,
+      fehlende Metadaten oder Upload noch nicht zentral gespeichert.
+   d) Netzwerkfehler/Zeitüberschreitung: WLAN/Internet/Firewall prüfen.
+7. Falls N > 0, PDF öffnen. Falls PDF-Daten fehlen, Firestore-Regeln für
+   appSettings/druckpdf_* und vorhandene PDF-Blöcke prüfen.
+
+FIREBASE-DATENORTE (bestehendes Projekt):
+  appSettings/druckdokumente
+  appSettings/druckpdf_<datei-id>_<blocknummer>
+
+ACHTUNG:
+- Das Paket verändert KEINE veröffentlichten Firebase-Regeln und keine
+  gespeicherten Dokumente automatisch.
+- Die beigelegten Regeln sind nur Referenz. NICHT ungeprüft veröffentlichen.
+- Für öffentliche Whiteboard-Ansicht dürfen nur zur öffentlichen Anzeige
+  freigegebene PDF-Dokumente bereitgestellt werden.
+- Browserdruck kann die Kopienanzahl NICHT zuverlässig auf 1 beschränken.
+  Der separate kontrollierte Druckdienst und die 10-Sekunden-Sperre bleiben TODO.
+- Firebase-Live-Zugriff auf das reale Vereinsprojekt und echter Samsung-Test
+  waren in dieser Testumgebung nicht möglich.

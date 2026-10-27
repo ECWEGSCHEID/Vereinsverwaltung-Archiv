@@ -1,0 +1,21 @@
+EC Wegscheid – Gmail API Einzeltest V2.8.7
+
+Basis: Komplettpaket V2.8.6 (inkl. Kalender V2.8.5, Doppel KO V2.8 und Wirtschaftlichkeit V2.8.2).
+
+1. Vorher Datensicherung erstellen; Paket lokal mit Live Server testen. Keine produktiven Vereinsmails automatisch verschicken.
+2. In Turnierverwaltung > Einladungen senden ein Turnier wählen.
+3. Betreff und Nachricht kontrollieren.
+4. Im neuen roten Testbereich OAuth-Client-ID der Webanwendung eintragen (endet mit .apps.googleusercontent.com). Für Live Server dessen eigene Client-ID verwenden, für GitHub die Web-Client-ID. Keine Secrets oder Passwörter eintragen.
+5. Mit Gmail verbinden. Im Google-Dialog unbedingt m.stadler1978@gmail.com auswählen. Der Absender muss dort als bestätigte Senden-als-Adresse turniereinladungen@ec-wegscheid.de existieren.
+6. Eigene Test-E-Mail-Adresse als EINZIGEN Empfänger eingeben. Nach expliziter Bestätigung Testmail mit automatisch erzeugter PDF senden.
+7. Prüfen: Gmail-Nachrichten-ID, Zustellung, sichtbarer Absender, PDF-Anhang.
+8. Bei Erfolg versucht die App ein Versandprotokoll in turniere/{turnierId}.gmailTestversand zu schreiben. Schlägt das Protokoll fehl, NICHT ungeprüft erneut versenden.
+
+Sicherheit und Grenzen:
+- Keine Serienversand-Funktion in dieser Testversion; Vereinsauswahl wird für Test nicht verwendet.
+- Google OAuth Access-Token nur im Arbeitsspeicher, nicht in Firebase oder localStorage. Die öffentliche Client-ID wird lokal im Browser gespeichert.
+- Der Versand erfolgt aus dem Browser über Gmail API mit Scope gmail.send; für produktiven Serienversand später Schutz vor Doppelsendungen, zentrales Protokoll und OAuth-Veröffentlichung/Verifizierung prüfen.
+- Gmail API benötigt HTTPS oder localhost; OAuth-JavaScript-Quelle muss in Google Cloud freigegeben sein.
+- Die bestehende Kalender-Anmeldung mit ecwegscheid@gmail.com bleibt unverändert.
+- Firebase-Regeln nicht geändert.
+- Kein echter Gmail-Versand von hier durchgeführt.

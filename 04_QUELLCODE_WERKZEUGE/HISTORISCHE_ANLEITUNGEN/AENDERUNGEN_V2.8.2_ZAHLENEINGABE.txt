@@ -1,0 +1,10 @@
+EC Wegscheid – Turnierwirtschaftlichkeit V2.8.2
+
+- Neue Turniere: Betragsfelder sind zunächst leer statt mit 0 vorbelegt.
+- Beim Bearbeiten bestehender Turniere: Beim Aktivieren eines Zahlenfeldes wird der vorhandene Wert markiert.
+- Beim Anklicken eines mit 0 vorbelegten Feldes wird die 0 vollständig markiert. 250 ergibt damit 250, nicht 2500.
+- Gilt auch für nachträglich hinzugefügte sonstige Ausgabenpositionen.
+- Gastro-Ausgaben bleiben schreibgeschützt und werden weiter automatisch als 1/3 berechnet.
+- Firebase, Datenmodell, Berechnung, Doppel-KO und sonstige Dateien unverändert.
+
+TEST: Komplettordner 01_GITHUB_UPLOAD über Live Server öffnen; vor produktivem Einsatz Datensicherung anlegen.

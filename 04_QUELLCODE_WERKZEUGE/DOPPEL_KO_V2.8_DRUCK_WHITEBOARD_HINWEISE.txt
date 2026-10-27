@@ -1,0 +1,18 @@
+EC Wegscheid – Doppel KO V2.8 – Whiteboard bleibt nach Druckdialog geöffnet
+
+Änderung gegenüber V2.7:
+- Der Browser darf beim Drucken den NATIVEN Vollbildmodus verlassen, ohne dass die Doppel-KO-Whiteboard-Ansicht geschlossen wird.
+- Der CSS-Vollbildmodus bleibt erhalten; Turnierbaum und Ergebniseingabe bleiben sichtbar.
+- „Zurück zur Eingabe“ beendet die Whiteboard-Ansicht weiterhin ausdrücklich.
+- Nach dem Wechsel aus dem nativen Vollbild wird die Namensgrößenanpassung erneut ausgeführt.
+
+TEST: ZIP entpacken; Ordner 01_GITHUB_UPLOAD mit Live Server starten; Doppel KO öffnen,
+Whiteboard-Ansicht starten, Ergebnis bestätigen, Druckdialog öffnen und schließen.
+Die Whiteboard-Ansicht muss sichtbar bleiben. Danach „Zurück zur Eingabe“ testen.
+
+Hinweis: Einige Browser beenden beim Drucken aus Sicherheitsgründen das native
+Fullscreen. Eine automatische Rückkehr in echtes Browser-Fullscreen ist dann
+nicht zuverlässig möglich (Benutzergeste erforderlich). Der bildschirmfüllende
+CSS-Modus verhindert jedoch den unerwünschten Wechsel zur Turniereingabe.
+
+Keine produktive Veröffentlichung; Firebase-/Samsung-Test steht noch aus.

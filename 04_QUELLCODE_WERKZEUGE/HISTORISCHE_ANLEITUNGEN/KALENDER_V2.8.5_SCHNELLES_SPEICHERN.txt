@@ -1,0 +1,25 @@
+EC Wegscheid – Kalender / Firebase V2.8.5 (TESTVERSION)
+
+Fehlerursache V2.8.4:
+Beim Speichern eines neuen oder bearbeiteten Termins wurde die gesamte Terminliste nacheinander in Firestore geschrieben und mit dem Server abgeglichen. Das konnte bei vielen Terminen Minuten dauern.
+
+Korrektur:
+- Normales Anlegen/Bearbeiten speichert nur das eine Firestore-Dokument.
+- Keine vollständige Sicherheitsprüfung, keine Massenlöschung, kein sequenzielles Überschreiben aller Termine bei dieser Aktion.
+- Nach bestätigtem Firebase-Schreiben wird Google-Kalender-Abgleich gestartet.
+- Bei Google-Erfolg wird die Ereignis-ID separat in Firebase gespeichert.
+- Fortschrittsanzeige trennt Firebase-Schreiben, Kalenderprüfung und Ereignis-ID-Speicherung.
+- Bestehende vollständige Synchronisierung für Verwaltungs-/Importaktionen bleibt erhalten.
+
+TEST:
+1. Bestehende Firebase-Datensicherung anfertigen.
+2. Komplettpaket entpacken, 01_GITHUB_UPLOAD in VS Code mit Live Server öffnen.
+3. Neuen Testtermin anlegen, auf Status 'In Firebase gespeichert' achten.
+4. In Google Kalender prüfen, dass exakt ein Eintrag angelegt wurde.
+5. Termin bearbeiten (Uhrzeit), speichern, auf Aktualisierung desselben Kalendereintrags prüfen.
+6. Seite neu laden, prüfen, ob Termin und Google-Verknüpfung erhalten bleiben.
+
+WICHTIG:
+Google Calendar API und Firebase konnten nicht live mit dem EC-Wegscheid-Konto getestet werden. Bei Google-Zeitüberschreitung oder unklarem Status NICHT blind erneut exportieren; zuerst den Kalender prüfen.
+
+Vor GitHub-Upload bitte mit einem Testtermin prüfen.

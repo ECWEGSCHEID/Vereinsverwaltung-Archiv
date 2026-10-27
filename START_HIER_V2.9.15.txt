@@ -1,0 +1,49 @@
+EC WEGSCHEID – TESTPAKET V2.9.15
+Stand: 21.10.2026
+
+Dieses Paket enthält ZWEI GETRENNTE GitHub-Projekte:
+
+A) VEREINSVERWALTUNG (Turnier löschen)
+   Ordner: 01_GITHUB_UPLOAD
+   Alle Dateien dieses Ordners wie gewohnt in das Repository
+   Vereinsverwaltung-Aktuell hochladen. Der Ordner selbst gehört
+   NICHT in das Repository.
+   Enthalten: Turnier-löschen-Button auch in der eigenständigen
+   Turnierverwaltung, mit Sicherheitsabfrage und atomarem Löschen
+   von Turnier + Mannschaftsmeldungen. Die eingebettete
+   Turnierverwaltung erhält ebenfalls eine abgesicherte Löschroutine.
+
+B) RESERVIERUNGSSYSTEM (Zurück / Uhrzeit fixieren)
+   Ordner: 05_RESERVIERUNGSSYSTEM_PATCHER
+   Das Reservierungssystem liegt in einem ANDEREN GitHub-Repository:
+   https://github.com/ECWEGSCHEID/Reservierungssystem
+   Hier NICHT das Verwaltungs-ZIP hochladen!
+
+   Vorgehen:
+   1. Aus dem Repository Reservierungssystem die dort aktuelle
+      index.html herunterladen (GitHub -> index.html -> Download raw file).
+   2. Datei Reservierungssystem_Update_191.html aus Ordner 05
+      lokal am PC öffnen.
+   3. Aktuelle index.html auswählen und auf
+      'Aktualisierte index.html erstellen' klicken.
+   4. Die neu erzeugte index.html im Repository Reservierungssystem
+      hochladen. Vorher alte Datei sichern.
+
+   Warum dieser Schritt? Das öffentliche Reservierungssystem wurde
+   zwischen den verfügbaren Quellständen verändert. Der Patch
+   bearbeitet deshalb ausdrücklich DEINE AKTUELLE index.html, damit
+   keine zwischenzeitlichen Funktionen verloren gehen.
+
+   Änderungen: im eingebetteten Reservierungssystem sichtbarer Button
+   'Zurück zum Startmenü' (kehrt zur Vereinsverwaltung zurück),
+   direkter Aufruf führt zur Vereinsstartseite; linke Uhrzeitspalte
+   bleibt beim horizontalen Scrollen der Wochenansicht stehen.
+
+WICHTIG:
+- NICHT direkt auf dem Produktivsystem ausprobieren, wenn keine
+  Sicherung des letzten funktionierenden GitHub-Stands vorhanden ist.
+- Firebase-Sicherheitsregeln wurden NICHT geändert.
+- Keine Live-Firebase-Tests wurden durchgeführt.
+- Die Google-Kalender-Spieler-Synchronisierung ist weiterhin offen.
+- V2.9.14 ist der letzte vom Nutzer erfolgreich getestete Stand
+  der Vereinsverwaltung; V2.9.15 ist eine neue TESTVERSION.

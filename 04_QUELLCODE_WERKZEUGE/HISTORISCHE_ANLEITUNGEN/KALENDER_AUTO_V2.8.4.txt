@@ -1,0 +1,12 @@
+EC Wegscheid - Kalender V2.8.4 - Automatische Google-Synchronisierung
+
+1. Beim Speichern einer NEUEN Veranstaltung wird nach erfolgreichem Firebase-Speichern direkt der Google Kalender geprüft.
+2. Bei keinem möglichen Duplikat wird der Eintrag erstellt und die Google-Ereignis-ID lokal und in Firebase gespeichert.
+3. Bei möglichem Duplikat wird NICHT automatisch erstellt. Im Menü Vorhandene Veranstaltungen -> Abgleichen / exportieren verknüpfen.
+4. Wird ein bereits verknüpfter Termin geändert, aktualisiert das Speichern den vorhandenen Google-Eintrag.
+5. Falls Google-Anmeldung/Google API/Firebase-ID-Speicherung fehlschlägt, wird dies angezeigt. Nicht erneut blind exportieren.
+6. Bei fehlender Google-Client-ID wird keine ICS-Datei automatisch heruntergeladen.
+
+WICHTIG: Der Live-Zugriff auf den Google-Kalender kann in der Testumgebung nicht ausgeführt werden. Vor GitHub-Upload zunächst mit einem einzigen neuen Testtermin über Live Server testen, Google Kalender auf einen einzigen Eintrag prüfen, anschließend Uhrzeit ändern und erneut prüfen.
+
+Bestehende Firebase-Regeln und andere Programmdateien wurden nicht geändert.

@@ -1,0 +1,6 @@
+EC Wegscheid V2.9.26 TEST
+- Vereinszusatz vor Vereinsname, alphabetisch nach Vereinsname sortiert.
+- Gefahrenbereich / Massenloeschung entfernt; Einzelloeschung bleibt.
+- Einladungsvorschau-Auswahl filtert vergangene Turniere.
+- Finale Cup und gewuenschte Turnierarten weiterhin fuer spaetere Version vorgemerkt.
+- Bitte Firebase und Whiteboard testen.

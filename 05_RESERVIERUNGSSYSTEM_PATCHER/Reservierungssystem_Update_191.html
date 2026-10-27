@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>EC Wegscheid – Reservierungssystem Update V1.9.1</title>
+<style>
+body{font:16px/1.5 system-ui,Arial,sans-serif;background:#131416;color:#eee;max-width:820px;margin:30px auto;padding:20px}
+h1{color:#fca5a5;font-size:1.6rem}.card{background:#242629;border:1px solid #52525b;border-radius:12px;padding:22px;margin:20px 0}
+button{background:#b91c1c;color:white;border:0;border-radius:8px;padding:12px 18px;font-size:1rem;font-weight:700;cursor:pointer}
+button:disabled{opacity:.45;cursor:not-allowed}input{margin:15px 0}code{color:#fbbf24}#result{white-space:pre-wrap;padding:12px;background:#09090b;border-radius:8px}
+</style></head><body>
+<h1>EC Wegscheid – Reservierungssystem</h1>
+<p><strong>Update V1.9.1:</strong> Rückkehr zum Startmenü und fixierte Uhrzeitspalte. Dieses Werkzeug ändert die aktuell verwendete <code>index.html</code> direkt auf deinem PC – ohne Firebase-Daten zu berühren.</p>
+<div class="card">
+<p><strong>1.</strong> Lade aus deinem GitHub-Repository <code>Reservierungssystem</code> die aktuelle <code>index.html</code> herunter.</p>
+<p><strong>2.</strong> Wähle diese Datei hier aus:</p>
+<input type="file" id="file" accept=".html,text/html"><br>
+<button id="go" disabled>Aktualisierte index.html erstellen</button>
+<p id="result" role="status">Noch keine Datei ausgewählt.</p>
+</div>
+<p><strong>3.</strong> Lade die erzeugte <code>index.html</code> in das Repository <code>Reservierungssystem</code> hoch. Die übrigen Dateien und die Firebase-Einstellungen bleiben unverändert.</p>
+<p>Vor dem Hochladen die bestehende Datei sichern. Zuerst im Testbetrieb kontrollieren.</p>
+<script>
+const file=document.getElementById('file'),button=document.getElementById('go'),result=document.getElementById('result');
+file.addEventListener('change',()=>{button.disabled=!file.files.length;result.textContent=file.files.length?'Datei ausgewählt: '+file.files[0].name:'Noch keine Datei ausgewählt.';});
+function applyReservationFixes(source){
+  if(source.includes('ECW_RESERVIERUNG_HOTFIX_191'))throw Error('Dieser Patch ist bereits in der Datei enthalten.');
+  if(!source.includes('function exitToStartPage()') || !source.includes('savedBookingsContainer'))throw Error('Das ist nicht die erwartete Reservierungssystem-index.html. Keine Änderung vorgenommen.');
+  let s=source;
+  const table='class="w-full border-collapse text-center min-w-[1300px]"';
+  if(!s.includes(table))throw Error('Wochenplan-Tabelle nicht gefunden. Bitte die aktuelle index.html prüfen.');
+  s=s.replace(table,'class="ecw-reservation-week-table w-full border-collapse text-center min-w-[1300px]"');
+  const th1='w-16 bg-zinc-950 sticky left-0 z-30">Uhrzeit</th>';
+  const th2='bg-zinc-950 sticky left-0 z-30"></th>';
+  const td='sticky left-0 z-10 text-[10px]">${t}</td>';
+  if(!s.includes(th1)||!s.includes(th2)||!s.includes(td))throw Error('Uhrzeitspalte hat einen unerwarteten Aufbau. Keine Ausgabe erstellt.');
+  s=s.replace(th1,'w-16 bg-zinc-950 sticky left-0 z-30 ecw-time-header">Uhrzeit</th>');
+  s=s.replace(th2,'bg-zinc-950 sticky left-0 z-30 ecw-time-header"></th>');
+  s=s.replace(td,'sticky left-0 z-10 text-[10px] ecw-time-cell">${t}</td>');
+  const begin=s.indexOf('function exitToStartPage()');
+  const end=s.indexOf('function closeExitMessage()',begin);
+  if(begin<0||end<begin)throw Error('Navigationsfunktion hat einen unerwarteten Aufbau. Keine Ausgabe erstellt.');
+  const nav=`function exitToStartPage() {
+            // Bei Einbettung in die Vereinsverwaltung deren Startseiten-Navigation verwenden.
+            try {
+                if(window.parent!==window && typeof window.parent.closeExternalPage==='function'){
+                    window.parent.closeExternalPage();
+                    return;
+                }
+            }catch(e){console.warn('Zurück-Navigation:',e);}
+            // Direkter Aufruf / eigener Tab: Startseite öffnen.
+            window.location.assign('https://ecwegscheid.github.io/Vereinsverwaltung-Aktuell/');
+        }
+        `;
+  s=s.slice(0,begin)+nav+s.slice(end);
+  const css=`\n<style id="ECW_RESERVIERUNG_HOTFIX_191">
+/* Uhrzeiten beim horizontalen Scrollen fixieren */
+.ecw-reservation-week-table{border-collapse:separate!important;border-spacing:0!important}
+.ecw-reservation-week-table .ecw-time-header{position:sticky!important;left:0!important;z-index:45!important;min-width:78px;width:78px;background:#09090b!important;color:#fafafa!important;box-shadow:2px 0 5px #000a}
+.ecw-reservation-week-table .ecw-time-cell{position:sticky!important;left:0!important;z-index:35!important;min-width:78px;width:78px;background:#18181b!important;color:#fafafa!important;box-shadow:2px 0 5px #0009}
+html.ecw-in-iframe #exitToStartButton{display:block!important}
+#exitToStartButton{display:block!important;visibility:visible!important;z-index:99999!important}
+</style>\n`;
+  if(!s.includes('</head>'))throw Error('HTML-Kopf fehlt.');
+  s=s.replace('</head>',css+'</head>');
+  s=s.replace('↩️ Zurück zur Startseite','← Zurück zum Startmenü');
+  return s;
+}
+button.addEventListener('click',async()=>{
+  button.disabled=true;
+  try{
+    const source=await file.files[0].text();
+    const output=applyReservationFixes(source);
+    const blob=new Blob([output],{type:'text/html;charset=utf-8'});
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement('a');a.href=url;a.download='index.html';document.body.appendChild(a);a.click();a.remove();
+    setTimeout(()=>URL.revokeObjectURL(url),3000);
+    result.textContent='Fertig: Die aktualisierte index.html wurde erstellt. Bitte im Repository Reservierungssystem hochladen und testen.';
+  }catch(e){result.textContent='Keine Datei erstellt: '+e.message;}
+  finally{button.disabled=false;}
+});
+</script></body></html>

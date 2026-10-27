@@ -1,0 +1,15 @@
+EC WEGSCHEID – GESAMTPAKET V2.5.4 + DOPPEL KO V2.6 (TEST)
+
+1. Das ZIP enthält die gesamte Vereinsverwaltung, nicht nur Doppel KO.
+2. Inhalt des Ordners 01_GITHUB_UPLOAD/ (nicht den Ordner selbst) nach einem Backup ins GitHub-Repository hochladen.
+3. Für den ersten Test besser den kompletten Ordner 01_GITHUB_UPLOAD/ in VS Code / Live Server öffnen.
+4. In der Turnierauswertung: Doppel KO System; im Verwaltungsmenü eigener Button neben Interne Cup und Solo Pyramide.
+5. Die Spielerauswahl und die Touch-Ergebniseingabe stammen aus der zuletzt funktionierenden V2.5-Einzeltestversion.
+6. Firebase-Speicherung benötigt einen angemeldeten berechtigten Benutzer UND passende Firestore-Regeln.
+7. Die Regeln in 02_FIREBASE_REGELN/ sind eine konsolidierte TESTFASSUNG der bisher mitgelieferten Regeln. VOR dem Einspielen mit den aktuell veröffentlichten produktiven Regeln vergleichen, bestehende Rechte NICHT blind überschreiben.
+8. Bei jedem bestätigten Ergebnis versucht das Programm sofort zu speichern; Statusanzeige beachten. Bei 'Nur lokal' ist Firebase NICHT gesichert.
+9. Turniere können separat angelegt, fortgesetzt, archiviert und gelöscht werden. Firebase und Whiteboard wurden nicht live getestet.
+10. Wertungsblätter: je neu freigegebener Paarung ein einzelner Druckdialog; Browser können Folge-Dialoge blockieren. Kein unbeaufsichtigter Druck.
+11. Kein produktiver GitHub-Upload und keine Änderung an Firebase wurde durch die Erstellung vorgenommen.
+
+Tests: JavaScript-Syntax, ZIP-Integrität, Menüs und Dateien statisch geprüft; Live-Firebase-/Samsung-/HP-Test steht aus.

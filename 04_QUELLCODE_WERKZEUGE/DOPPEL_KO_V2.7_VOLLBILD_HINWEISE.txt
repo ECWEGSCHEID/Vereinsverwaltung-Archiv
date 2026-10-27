@@ -1,0 +1,22 @@
+EC WEGSCHEID – KOMPLETTPAKET V2.5.4 + DOPPEL KO V2.7 (TEST)
+
+ÄNDERUNG GEGENÜBER V2.6
+- Button „Whiteboard-Ansicht“ öffnet jetzt automatisch den Vollbildmodus.
+- Innerhalb der Turnierauswertung wird das gesamte iFrame als Vollbild angefordert.
+- Falls der Browser das echte Vollbild nicht erlaubt, blendet eine CSS-Vollbildansicht
+  die umgebende Turnierauswertung aus und nutzt die volle verfügbare Bildschirmfläche.
+- „Zurück zur Eingabe“ schließt den Vollbildmodus und stellt die Verwaltungsansicht wieder her.
+- Beim direkten Aufruf von doppel-ko.html funktioniert die Vollbildanforderung ebenfalls.
+- Nach der Größenänderung werden Spielernamen erneut an die verfügbare Breite angepasst.
+
+TEST
+1. 01_GITHUB_UPLOAD im Live Server öffnen und index.html starten.
+2. Turnierauswertung > Doppel KO System > Whiteboard-Ansicht öffnen.
+3. Kontrollieren: keine Kopfzeile der Turnierauswertung mehr sichtbar; gesamte Fläche.
+4. Auf „Zurück zur Eingabe“ tippen: normale Ansicht muss wieder erscheinen.
+5. 8er-, 16er- und 32er-Turnier testen; die Namen bei 32 Spielern sind
+   durch die vielen Spalten weiterhin begrenzt und können abgekürzt sein.
+
+WICHTIG
+Dies ist eine Testversion. Keine Firebase-Regeln ungeprüft veröffentlichen.
+Die Änderung betrifft nur Vollbild-/Ansichtssteuerung und nicht die Turnierlogik.

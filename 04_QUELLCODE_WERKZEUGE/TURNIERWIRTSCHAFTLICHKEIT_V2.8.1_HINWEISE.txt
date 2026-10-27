@@ -1,0 +1,23 @@
+EC WEGSCHEID – TURNIERWIRTSCHAFTLICHKEIT V2.8.1 – TEST
+
+Basis: Komplettpaket Vereinsverwaltung V2.5.4 / Doppel KO V2.8.
+Geändert: ausschließlich turnierwirtschaftlichkeit.html.
+
+1. Getränke-/Speisenausgaben = 1/3 der Einnahmen, auf Cent gerundet.
+   Bei Neuaufnahme und beim Öffnen/Bearbeiten eines vorhandenen Turniers
+   wird der Betrag berechnet. Bereits gespeicherte Altdaten werden nicht
+   ohne ausdrückliches Speichern des jeweiligen Turniers überschrieben.
+2. Felder Sponsorgeld für Gastro und sonstige Ausgaben entfernt.
+   Alte Sponsoring-Zuordnungen bleiben in den Daten gespeichert,
+   werden weiter in der Sponsor-Verfügbarkeitsrechnung berücksichtigt
+   und bei bestehenden Positionen nicht unbemerkt gelöscht.
+3. Helfernamen erscheinen nach + Hinzufügen als kontrastreiche Chips.
+4. Im Dialog Helfer bearbeiten kann eine neue Kategorie angelegt werden.
+   Sie wird erst beim Klick auf Helfer speichern übernommen und in
+   Helferübersicht und Einsatzstatistik für alle Turniere angezeigt.
+5. Kategorien werden zentral mit dem bestehenden Firebase-Datenobjekt
+   gespeichert und in JSON-Sicherungen exportiert/importiert.
+
+WICHTIG: Vor produktivem Einsatz Datensicherung anlegen.
+Firebase-Schreibzugriff/Live-Whiteboard konnte hier nicht getestet werden.
+Das Paket ist für den Test vorgesehen.

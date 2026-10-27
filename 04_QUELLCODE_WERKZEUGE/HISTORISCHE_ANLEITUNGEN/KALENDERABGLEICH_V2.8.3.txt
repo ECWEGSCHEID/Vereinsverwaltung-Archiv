@@ -1,0 +1,26 @@
+EC WEGSCHEID – TURNIER-/TERMINPLANER: GOOGLE-KALENDER-ABGLEICH V2.8.3
+
+BASIS: Gesamtpaket V2.5.4 / Doppel KO V2.8 / Turnierwirtschaftlichkeit V2.8.2.
+GEÄNDERT: 01_GITHUB_UPLOAD/js/hauptprogramm.js und 01_GITHUB_UPLOAD/index.html (Cache-Version).
+KEINE Änderungen an Firestore-Regeln oder an bereits gespeicherten Terminen.
+
+NEUE BEDIENUNG
+1. Vor dem Update bitte die Vereinsdaten sichern. ZIP in einen neuen Ordner entpacken.
+2. Google Client-ID und Kalender-ID bleiben wie bisher in den Kalendereinstellungen hinterlegt.
+3. Im Turnier-/Terminplaner bei einem Alttermin auf „Export prüfen“ bzw. „Abgleichen / exportieren“ klicken.
+4. Das Programm sucht zuerst nach der ursprünglichen ICS-UID und nach Google-Terminen im Umkreis von 15 Tagen vor bis 16 Tagen nach dem Veranstaltungsdatum.
+5. Bei einem gefundenen Termin „Diesen Termin verknüpfen“ anklicken. Der vorhandene Google-Termin wird NICHT dupliziert und NICHT überschrieben. Die Google-Ereignis-ID wird lokal und in Firebase gespeichert.
+6. Gibt es mehrere exakte Treffer, zuerst EINEN Termin als den zu behaltenden auswählen und verknüpfen. Danach können andere exakte Duplikate über „Doppelten Eintrag löschen“ entfernt werden – nur nach zweifacher Bestätigung mit Eingabe LÖSCHEN.
+7. Falls kein passender Eintrag gefunden wird: Google Kalender zusätzlich selbst prüfen. Erst danach über „Nach Prüfung neuen Termin erstellen“ und Eingabe NEU einen neuen Eintrag anlegen.
+8. Sobald die ID gespeichert ist, aktualisiert „In Google aktualisieren“ den vorhandenen Termin, statt einen weiteren anzulegen. „Duplikate prüfen“ bleibt verfügbar.
+
+SICHERHEIT
+- Keine automatische Löschung. Nicht exakt übereinstimmende Treffer können NICHT über die Duplikat-Löschfunktion gelöscht werden.
+- Das Programm verhindert das Verknüpfen eines Google-Termins, der bereits einem anderen Turnier im aktuellen Datenbestand zugeordnet ist.
+- Bei fehlender Firebase-Speicherung erscheint eine Warnung; nicht erneut exportieren, bevor der Speicherfehler geklärt ist.
+- Die Kalenderprüfung erfasst ICS-UID-Treffer sowie einen begrenzten Datumszeitraum. Bei umbenannten/verschobenen Altterminen außerhalb dieses Zeitraums kann ein Eintrag unentdeckt bleiben. Daher vor „NEU“ manuell prüfen.
+- Der Zugriff auf den echten Google-Kalender und die echte Firebase-Datenbank wurde nicht automatisiert getestet.
+
+TEST: JS-Syntax mit Node, simulierte Google-Kalender-API, Verknüpfung, manuelle Duplikat-Löschung und Browserdialog in Chromium geprüft.
+
+WICHTIG: Erst lokal mit VS Code/Live Server testen, danach produktiv hochladen. Die mitgelieferten Firebase-Regeln NICHT ungeprüft ersetzen.

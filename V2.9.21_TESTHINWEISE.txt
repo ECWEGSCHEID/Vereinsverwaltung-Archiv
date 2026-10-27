@@ -1,0 +1,23 @@
+EC Wegscheid V2.9.21 – Sachspenden als Preiswert
+Basis: V2.9.20 (Google-Kalenderfunktion unverändert).
+
+GEAENDERT:
+Turnierwirtschaftlichkeit > Sponsoring / Jahresauswertung:
+- Sachspenden werden mit dem erfassten Euro-Wert als Preiswert angezeigt.
+- Neuer Ausweis 'Geldwert der Sachspenden (Preise)' und 'Gesamter Preiswert inkl. Sachspenden'.
+- Geldspenden und tatsaechlich bezahlte Preiskosten bleiben getrennt.
+- Jahresgewinn wird durch Sachspenden NICHT kuenstlich erhoeht.
+- Dienstleistungen werden NICHT als Preise gezaehlt.
+
+TEST:
+1. Sachspende ueber 100 EUR anlegen.
+2. Jahresauswertung: Geldwert Sachspenden +100 EUR, Gesamtpreiswert +100 EUR.
+3. Jahresgewinn und verfuegbares Sponsorgeld unveraendert.
+4. Betrag bearbeiten/loeschen: Preiswert passt sich an.
+5. Andere Jahre und bestehende Daten pruefen.
+
+WEITERE GESAMT-TO-DOS V2.9.21 (noch NICHT umgesetzt):
+- Interne Cups DQ/DNF rueckwirkend.
+- Live-Startlisten vergangene Turniere ausblenden.
+- Turniereinladungen Monatsordner im Dropdown.
+- Doppel-KO optionaler Startkartendruck.
